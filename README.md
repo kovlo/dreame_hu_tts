@@ -89,6 +89,12 @@ Ha valami hang hiányzik a mellékelt CSV-vel, php és python scriptekkel tudsz 
       - Egy hangfájl javítása: `docker compose run --rm --entrypoint php voice-pack bing_hu_voice.php "szöveg" fájlnév Tamas`
       - Korábban elkészült WAV-ok konvertálása: `docker compose run --rm --entrypoint python3 voice-pack convert.py Tamas`
       - A generált fájlok a `TTS voice creator` mappában maradnak.
+5.  **Saját felvételek hozzáadása:**
+      - Tegyél csak a módosítandó felvételeket a `TTS voice creator/custom-sounds` mappába. A fájlnév a CSV-ben szereplő azonosító legyen, például `1.wav` vagy `s0.mp3`.
+      - A kiválasztott alap hangcsomagból minden más hang változatlanul megmarad. Az egyedi felvételek mono, 16 kHz-es, 56 kbps-os Ogg Vorbis fájlként kerülnek a csomagba.
+      - Példa Noémi alapcsomaggal (Azure API-kulcs nem szükséges):
+        `docker compose run --rm --entrypoint python3 voice-pack build_custom_pack.py --source /base-packs/noemi_dreame_hu_voice --name sajat-noemi`
+      - A `sajat-noemi.tar.gz` és a hozzá tartozó MD5/méret adat a `TTS voice creator` mappába kerül.
 
 -----
 
@@ -178,6 +184,12 @@ If any sound is missing, you can create your own using the attached CSV, along w
       * Generate one corrected WAV: `docker compose run --rm --entrypoint php voice-pack bing_hu_voice.php "text" filename Tamas`
       * Convert existing WAVs: `docker compose run --rm --entrypoint python3 voice-pack convert.py Tamas`
       * Generated files remain in the `TTS voice creator` directory.
+5.  **Use selected custom recordings:**
+      * Put only the recordings you want to replace in `TTS voice creator/custom-sounds`, named with the exact CSV ID, such as `1.wav` or `s0.mp3`.
+      * Sounds not overridden are copied unchanged from the selected complete source pack. Custom recordings are converted to mono, 16 kHz, 56 kbps Ogg Vorbis.
+      * Example using the bundled Noémi pack as the source (no Azure API key required):
+        `docker compose run --rm --entrypoint python3 voice-pack build_custom_pack.py --source /base-packs/noemi_dreame_hu_voice --name my-noemi`
+      * The output `my-noemi.tar.gz` and its MD5/size metadata are written to `TTS voice creator`.
 
 <!-- end list -->
 

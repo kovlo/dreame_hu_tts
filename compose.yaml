@@ -7,5 +7,9 @@ services:
       - type: bind
         source: ./TTS voice creator
         target: /workspace
+      - type: bind
+        source: ./dreame_voicepack_hu
+        target: /base-packs
+        read_only: true
     environment:
       SPEECH_KEY: ${SPEECH_KEY:-}
