@@ -1,0 +1,11 @@
+services:
+  voice-pack:
+    build:
+      context: ./TTS voice creator
+    working_dir: /workspace
+    volumes:
+      - type: bind
+        source: ./TTS voice creator
+        target: /workspace
+    environment:
+      SPEECH_KEY: ${SPEECH_KEY:-}

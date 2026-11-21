@@ -64,7 +64,7 @@ A `Voice packs` részbe írd be az alábbiakat (példa a Noémi hanghoz):
 
 Ha valami hang hiányzik a mellékelt CSV-vel, php és python scriptekkel tudsz magadnak készíteni. Erre a részre nincs szükséged, ha neked megfelel az a hang, ami előre el van készítve\!
 
-1.  **Microsoft Azure Speech (Bing TTS) API kulcs:** Amit a `bing_hu_voice.php` fájl 12.-ik sorába be kell írni.
+1.  **Microsoft Azure Speech (Bing TTS) API kulcs:** Állítsd be a `SPEECH_KEY` környezeti változót, vagy add meg a parancs futtatásakor.
       - [Ingyenes kulcs beszerzés](https://azure.microsoft.com/en-us/try/cognitive-services/?api=speech-services)
       - [Fizetős kulcs](https://go.microsoft.com/fwlink/?LinkId=872236)
 2.  **Szükséges programok:**
@@ -82,6 +82,13 @@ Ha valami hang hiányzik a mellékelt CSV-vel, php és python scriptekkel tudsz 
         Ha csak egy szöveget szeretnél javítani elkészíti a megadott szöveget fájlnév.wav formában, a kért hangban (Tamas/Noemi/Ryan/Jenny) és ezután konvertálhatod újból.
       - **convert.py** *pl.: `convert.py HANG`*
         Ha konvertálás nélkül kérted vagy javítottál, ezzel tudod konvertálni külön.
+4.  **Docker használata:**
+      - Telepítsd a Docker Engine-t vagy Docker Desktopot.
+      - Linux/macOS: `export SPEECH_KEY="AZURE_KULCSOD"`; Windows PowerShell: `$env:SPEECH_KEY="AZURE_KULCSOD"`.
+      - A teljes hangcsomag elkészítése: `docker compose run --rm voice-pack Tamas --convert`
+      - Egy hangfájl javítása: `docker compose run --rm --entrypoint php voice-pack bing_hu_voice.php "szöveg" fájlnév Tamas`
+      - Korábban elkészült WAV-ok konvertálása: `docker compose run --rm --entrypoint python3 voice-pack convert.py Tamas`
+      - A generált fájlok a `TTS voice creator` mappában maradnak.
 
 -----
 
@@ -154,7 +161,7 @@ In the `Voice packs` section, enter the following (example for Noémi voice):
 
 If any sound is missing, you can create your own using the attached CSV, along with the PHP and Python scripts. You do not need this part if you are satisfied with the pre-made voice packages\!
 
-1.  **API Key:** You need a Microsoft Azure Speech (Bing TTS) API key, which must be entered in line 12 of the `bing_hu_voice.php` file.
+1.  **API Key:** Set the `SPEECH_KEY` environment variable to your Microsoft Azure Speech (Bing TTS) API key.
 2.  **Required Programs:** (Instructions above are for Windows, but Linux users can install via repo).
       * PHP 7/8 (add to PATH)
       * Vorbis-tools (add `oggenc.exe` to PATH)
@@ -164,6 +171,13 @@ If any sound is missing, you can create your own using the attached CSV, along w
       * `ttscreate.py VOICE --convert` : Generates WAVs from CSV -\> Normalizes -\> Converts to OGG -\> Copies non-TTS sounds -\> Cleans up placeholders -\> Creates .tar.gz -\> Generates MD5 and size info.
       * `bing_hu_voice.php "text" filename VOICE` : Generates a single WAV file for corrections.
       * `convert.py VOICE` : Converts WAV to OGG if skipped previously.
+4.  **Docker:**
+      * Install Docker Engine or Docker Desktop.
+      * Set the key: `export SPEECH_KEY="YOUR_AZURE_KEY"` (PowerShell: `$env:SPEECH_KEY="YOUR_AZURE_KEY"`).
+      * Build a complete voice package: `docker compose run --rm voice-pack Tamas --convert`
+      * Generate one corrected WAV: `docker compose run --rm --entrypoint php voice-pack bing_hu_voice.php "text" filename Tamas`
+      * Convert existing WAVs: `docker compose run --rm --entrypoint python3 voice-pack convert.py Tamas`
+      * Generated files remain in the `TTS voice creator` directory.
 
 <!-- end list -->
 

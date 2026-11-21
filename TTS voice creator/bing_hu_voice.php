@@ -25,8 +25,10 @@ if (file_exists($filePath)) {
 // -------------------------------------------------------
 
 // --- KONFIGURÁCIÓ ---
-// IDE ÍRD BE AZ API KULCSODAT!
-$apiKey = "API_KULCS"; 
+$apiKey = getenv('SPEECH_KEY');
+if ($apiKey === false || $apiKey === '') {
+    throw new RuntimeException("Állítsd be a SPEECH_KEY környezeti változót.");
+}
 
 $AccessTokenUri = "https://northeurope.api.cognitive.microsoft.com/sts/v1.0/issueToken";
 $ttsServiceUri = "https://northeurope.tts.speech.microsoft.com/cognitiveservices/v1";
