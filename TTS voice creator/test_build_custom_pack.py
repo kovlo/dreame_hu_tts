@@ -30,8 +30,8 @@ class BuildCustomPackTests(unittest.TestCase):
                     source_file.write_bytes(content)
                     archive.add(source_file, arcname=filename)
 
-            self._write_wav(custom_sounds / "s0.wav")
-            self._write_wav(custom_sounds / "1.wav")
+            self._write_wav(custom_sounds / "0-indulasi-hang.wav")
+            self._write_wav(custom_sounds / "1-varakozas.wav")
             output_pack, metadata_file, _ = build_custom_pack(
                 source_pack,
                 custom_sounds,

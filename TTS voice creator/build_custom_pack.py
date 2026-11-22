@@ -1,6 +1,7 @@
 import argparse
 import csv
 import hashlib
+import re
 import subprocess
 import sys
 import tarfile
@@ -12,6 +13,7 @@ CREATOR_DIR = Path(__file__).resolve().parent
 CSV_PATH = CREATOR_DIR / "all_dreame_hu.csv"
 DEFAULT_CUSTOM_SOUNDS = CREATOR_DIR / "custom-sounds"
 SUPPORTED_EXTENSIONS = {".mp3", ".wav"}
+SOUND_ID_PREFIX = re.compile(r"^(?:s)?(?P<sound_id>[0-9]+)", re.IGNORECASE)
 SPEECH_NORMALIZATION = "speechnorm=p=0.95:e=2.0:c=2.0:t=0.0:r=0.001"
 
 
@@ -44,6 +46,10 @@ def find_custom_sounds(
         raise ValueError(f"Custom sounds directory not found: {custom_sounds_dir}")
 
     custom_sounds: dict[str, Path] = {}
+    package_files = {
+        str(int(Path(filename).stem)): filename
+        for filename in sentence_files.values()
+    }
     for path in sorted(custom_sounds_dir.iterdir()):
         if path.name in {".gitignore", ".DS_Store"}:
             continue
@@ -52,13 +58,16 @@ def find_custom_sounds(
         if path.suffix.lower() not in SUPPORTED_EXTENSIONS:
             raise ValueError(f"Only MP3 and WAV files are supported: {path.name}")
 
-        code = path.stem
-        if code not in sentence_files:
+        match = SOUND_ID_PREFIX.match(path.stem)
+        if match is None:
             raise ValueError(f"Unknown sentence ID in custom sound filename: {path.name}")
 
-        package_filename = sentence_files[code]
+        sound_id = str(int(match.group("sound_id")))
+        package_filename = package_files.get(sound_id)
+        if package_filename is None:
+            raise ValueError(f"Unknown sentence ID in custom sound filename: {path.name}")
         if package_filename in custom_sounds:
-            raise ValueError(f"More than one custom sound supplied for ID {code}")
+            raise ValueError(f"More than one custom sound supplied for ID {sound_id}")
         custom_sounds[package_filename] = path
 
     if not custom_sounds:
