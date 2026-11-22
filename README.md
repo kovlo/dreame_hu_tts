@@ -95,6 +95,12 @@ Ha valami hang hiányzik a mellékelt CSV-vel, php és python scriptekkel tudsz 
       - Példa Noémi alapcsomaggal (Azure API-kulcs nem szükséges):
         `docker compose run --rm --entrypoint python3 voice-pack build_custom_pack.py --source /base-packs/noemi_dreame_hu_voice --name sajat-noemi`
       - A `sajat-noemi.tar.gz` és a hozzá tartozó MD5/méret adat a `TTS voice creator` mappába kerül.
+6.  **A kész hangok meghallgatása:**
+      - Futtasd: `docker compose run --rm --entrypoint python3 voice-pack extract_listening_packs.py`
+      - A négy csomag MP3 fájljai külön mappába kerülnek: `TTS voice creator/listening-packs/jenny`, `noemi`, `ryan` és `tamas`. A `playlist.m3u` fájlt megnyitva sorban lejátszhatod az adott hangcsomag összes hangját.
+      - Az MP3 fájlnevek tartalmazzák az azonosítót és a CSV-ben lévő parancs első 40 karakterét. Például 60 karakterhez futtasd ezt: `docker compose run --rm --entrypoint python3 voice-pack extract_listening_packs.py --text-chars 60`.
+      - Csak egy hang kinyeréséhez: `docker compose run --rm --entrypoint python3 voice-pack extract_listening_packs.py --voice noemi`
+      - A kimeneti `listening-packs` mappa gitignorált.
 
 -----
 
@@ -190,6 +196,12 @@ If any sound is missing, you can create your own using the attached CSV, along w
       * Example using the bundled Noémi pack as the source (no Azure API key required):
         `docker compose run --rm --entrypoint python3 voice-pack build_custom_pack.py --source /base-packs/noemi_dreame_hu_voice --name my-noemi`
       * The output `my-noemi.tar.gz` and its MD5/size metadata are written to `TTS voice creator`.
+6.  **Listen to the included voice packs:**
+      * Run: `docker compose run --rm --entrypoint python3 voice-pack extract_listening_packs.py`
+      * MP3 files for all four packs are saved in separate folders under `TTS voice creator/listening-packs`. Open a voice folder's `playlist.m3u` to play all sounds in order.
+      * MP3 filenames include each sound ID and the first 40 characters of its CSV command. For 60 characters, run: `docker compose run --rm --entrypoint python3 voice-pack extract_listening_packs.py --text-chars 60`.
+      * To extract just one voice: `docker compose run --rm --entrypoint python3 voice-pack extract_listening_packs.py --voice noemi`
+      * The generated `listening-packs` folder is gitignored.
 
 <!-- end list -->
 
